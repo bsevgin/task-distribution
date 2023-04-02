@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Task;
+use App\Services\ApiDataProvider;
 use App\Services\ApiOne;
 use App\Services\ApiTwo;
 use Illuminate\Console\Command;
@@ -29,26 +30,15 @@ class GetTasks extends Command
     public function handle(): void
     {
         try{
-            $api = new ApiOne();
-            if(!$api->getList()){
+            $apiDataProvider = app(ApiDataProvider::class);
+            $data = $apiDataProvider->getData();
+            if(!$data){
                 $this->warn('There is no task in ApiOne.');
             }
 
-            Task::insert($api->getList());
-            $this->info('ApiOne tasks inserted successfully.');
-        }
-        catch (\Exception $e){
-            $this->error($e->getMessage());
-        }
+            Task::insert($data);
 
-        try{
-            $api = new ApiTwo();
-            if(!$api->getList()){
-                $this->warn('There is no task in ApiTwo.');
-            }
-
-            Task::insert($api->getList());
-            $this->info('ApiTwo tasks inserted successfully.');
+            $this->info('Tasks inserted successfully.');
         }
         catch (\Exception $e){
             $this->error($e->getMessage());
