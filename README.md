@@ -19,3 +19,6 @@ Task distribution according to difficulty level
 - http://localhost:8001
 - username: root
 - password: (no password)
+
+## SS
+![Screenshot](./ss.png)
